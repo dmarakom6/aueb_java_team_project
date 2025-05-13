@@ -8,6 +8,8 @@
 
 */
 
+import java.util.Scanner;
+
 import utils.menus.*;
 
 public class Main {
@@ -37,9 +39,9 @@ public class Main {
 		}
 
 		InnerMenu(menu);
-
+		Scanner scan = new Scanner(System.in);
 	}
-
+	
 	public static void InnerMenu(Menu menu) {
 		menu.init();
 		int s = menu.getInt();
@@ -53,6 +55,12 @@ public class Main {
 					break;
 				case 3:
 					// Search movie
+					System.out.println("Enter movie title:");
+					String title = menu.getString();
+					if ArrayListInstance.contains(title) {
+
+						System.out.println("Vrethike i tainia me titlo " + title + ", Eidos/Eidh: " +);
+					}
 					break;
 				case 4:
 					// List movies

@@ -125,7 +125,7 @@ public class Main {
 				case 4: // compare movies
 					
 					break;
-				case 5:
+				case 5: //back
 					MainMenu(new Menu());
 					return;
 				default:
@@ -177,17 +177,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		// Movie m = new Movie("Inception", 2010, List.of("Sci-Fi", "Action"),
-		// "Christopher Nolan");
-		// User u = new User("alice");
-		// Review r = new BasicReview(u, 9, "Mind-blowing!", m);
-		// m.addReview(r);
-		// u.addReview(r);
-		// m.printDetails();
-		// System.out.println();
-		// u.printDetails();
-		// System.out.println();
-		// r.printDetails();
 		usersList.initializeSampleUsers(); // Initialize sample users here
 		Menu menu = new Menu();
 		Main.MainMenu(menu);

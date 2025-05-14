@@ -59,11 +59,8 @@ public class Main {
 				case 2:
 				// Get details
 					break;
-				case 3:
-					// Update movie
 
-					break;
-				case 4:
+				case 3:
 					boolean isVerified = false;
 					boolean isFound = false;
 					System.out.println(
@@ -103,10 +100,10 @@ public class Main {
 					}
 
 					break;
-				case 5:
+				case 4:
 					// compare movie
 					break;
-				case 6:
+				case 5:
 					MainMenu(new Menu());
 					return;
 				default:

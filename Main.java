@@ -15,6 +15,10 @@ import utils.menus.*;
 import data.*;
 
 public class Main {
+	
+	public MoviesList moviesList = new MoviesList();
+	public UsersList usersList = new UsersList();
+	public ReviewsList reviewsList = new ReviewsList();
 
 	public static void MainMenu(Menu menu) {
 		menu.init();

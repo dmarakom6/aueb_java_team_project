@@ -12,6 +12,8 @@ import java.util.Scanner;
 
 import utils.menus.*;
 
+import data.*;
+
 public class Main {
 
 	public static void MainMenu(Menu menu) {
@@ -39,7 +41,7 @@ public class Main {
 		}
 
 		InnerMenu(menu);
-		Scanner scan = new Scanner(System.in);
+
 	}
 	
 	public static void InnerMenu(Menu menu) {
@@ -54,13 +56,8 @@ public class Main {
 					// Remove movie
 					break;
 				case 3:
-					// Search movie
-					System.out.println("Enter movie title:");
-					String title = menu.getString();
-					if ArrayListInstance.contains(title) {
-
-						System.out.println("Vrethike i tainia me titlo " + title + ", Eidos/Eidh: " +);
-					}
+					// Search movie, to be implemented inside a utility
+					
 					break;
 				case 4:
 					// List movies

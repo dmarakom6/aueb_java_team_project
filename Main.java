@@ -154,15 +154,12 @@ public class Main {
 					// Add review
 					break;
 				case 2:
-					// Remove review
+					// Get review details
 					break;
 				case 3:
-					// Search review
+					// Delete review
 					break;
-				case 4:
-					// List reviews
-					break;
-				case 5:
+				case 4: // back
 					MainMenu(new Menu());
 					return;
 				default:

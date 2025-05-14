@@ -1,9 +1,11 @@
 package types;
+
 import java.util.*;
 import types.interfaces.Printable;
 
 public class Movie implements Printable {
     private String title;
+    private User user; // user that added the movie
     private int year;
     private List<String> genres;
     private String director;
@@ -25,6 +27,14 @@ public class Movie implements Printable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getYear() {
@@ -86,7 +96,6 @@ public class Movie implements Printable {
         reviews.remove(r);
     }
 
-
     public void addRelatedMovie(Movie m) {
         relatedMovies.add(m);
     }
@@ -103,10 +112,12 @@ public class Movie implements Printable {
 
     public void printDetails() {
         System.out.println("Title: " + title);
+        System.out.println("Added by: " + user);
         System.out.println("Year: " + year);
         System.out.println("Genres: " + genres);
         System.out.println("Director: " + director);
         System.out.println("Ratings: " + reviews + " (" + getAverageRating() + ")");
     }
-    // Getters and other utility methods can be added here like getTitle(), getYear(), etc.
+    // Getters and other utility methods can be added here like getTitle(),
+    // getYear(), etc.
 }

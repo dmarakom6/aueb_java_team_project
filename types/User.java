@@ -27,6 +27,18 @@ public class User implements Printable {
         return username;
     }
 
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+        public boolean checkIsVerified() {
+        if (this.getVerificationCode() == null) {
+            System.out.println("User is not verified.");
+            return false;
+        }
+        System.out.println("User is verified.");
+        return true;
+    }
     public void printDetails() {
         System.out.println("User: " + username);
         System.out.println("Reviews submitted: " + reviews.size());

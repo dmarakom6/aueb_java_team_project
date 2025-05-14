@@ -4,16 +4,10 @@ import java.util.Scanner;
 
 public class Input { 
 
-    private String message;
     private static final Scanner scanner = new Scanner(System.in); // will be reused
 
-    Input() {
-        this.message = "Select an option: ";
-    }
-    Input(String message) {
-        this.message = message;
-    }
-    public int getInt() {
+
+    public int getInt(String message) {
         System.out.print(message);
         int selection = -1;
         try {
@@ -24,7 +18,8 @@ public class Input {
         return selection;
     }
 
-    public String getString() {
+
+    public String getString(String message) {
         System.out.print(message);
         String selection = "";
         try {

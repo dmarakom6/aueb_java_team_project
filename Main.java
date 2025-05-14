@@ -8,20 +8,21 @@
 
 */
 
-
 import utils.menus.*;
 
 import data.*;
+import types.*;
 
 public class Main {
-	
-	public MoviesList moviesList = new MoviesList();
-	public UsersList usersList = new UsersList();
-	public ReviewsList reviewsList = new ReviewsList();
+
+	public static MoviesList moviesList = new MoviesList();
+	public static UsersList usersList = new UsersList();
+	// usersList.initializeSampleUsers(); // Moved to the main method
+	public static ReviewsList reviewsList = new ReviewsList();
 
 	public static void MainMenu(Menu menu) {
 		menu.init();
-		Integer s = menu.getInt();
+		Integer s = menu.getInt("Enter an option: ");
 		switch (s) {
 			case 1:
 				menu = new MovieToolsMenu();
@@ -46,27 +47,64 @@ public class Main {
 		InnerMenu(menu);
 
 	}
-	
+
 	public static void InnerMenu(Menu menu) {
 		menu.init();
-		int s = menu.getInt();
+		int s = menu.getInt("Enter an option: ");
 		if (menu instanceof MovieToolsMenu) {
 			switch (s) {
 				case 1:
 					// Add movie
 					break;
 				case 2:
-					// Remove movie
+				// Get details
 					break;
 				case 3:
-					// Search movie, to be implemented inside a utility
-					
+					// Update movie
+
 					break;
 				case 4:
-					// List movies
+					boolean isVerified = false;
+					boolean isFound = false;
+					System.out.println(
+							"Regular users can only remove their own movies.\nVerified users can remove any movie.\n");
+					String username = menu.getString("You are user: ");
+					for (User user : usersList.getUsers()) {
+						if (user.getUsername().equals(username) && user.checkIsVerified()) {
+							System.out.println("You are a verified user.");
+							isVerified = isFound = true;
+							break;
+						} else if (user.getUsername().equals(username) && !user.checkIsVerified()) {
+							System.out.println("You are a regular user.");
+							isFound = true;
+							break;
+						}
+					}
+					if (!isFound) {
+						System.out.println("User not found.");
+						System.exit(2);
+					}
+					String title = menu.getString("Enter the title of the movie to remove: ");
+					for (Movie movie : moviesList.getMovies()) {
+						if (movie.getTitle().equals(title)) {
+							if (isVerified) {
+								moviesList.removeMovie(movie);
+								System.out.println("Movie removed successfully.");
+							} else if (movie.getUser().getUsername().equals(username)) {
+								moviesList.removeMovie(movie);
+								System.out.println("Movie removed successfully.");
+							} else {
+								System.out.println("You are not authorized to remove this movie.");
+							}
+						} else {
+							System.out.println("Movie not found.");
+							System.exit(2);
+						}
+					}
+
 					break;
 				case 5:
-
+					// compare movie
 					break;
 				case 6:
 					MainMenu(new Menu());
@@ -131,6 +169,7 @@ public class Main {
 		// u.printDetails();
 		// System.out.println();
 		// r.printDetails();
+		usersList.initializeSampleUsers(); // Initialize sample users here
 		Menu menu = new Menu();
 		Main.MainMenu(menu);
 	}

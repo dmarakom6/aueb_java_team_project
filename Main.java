@@ -10,6 +10,8 @@
 
 import utils.menus.*;
 
+import java.util.List;
+
 import data.*;
 import types.*;
 
@@ -53,25 +55,45 @@ public class Main {
 		int s = menu.getInt("Enter an option: ");
 		if (menu instanceof MovieToolsMenu) {
 			switch (s) {
-				case 1:
-					// Add movie
+				case 1: // add movie
+					String t = menu.getString("Enter the title of the movie: ");
+					int y = menu.getInt("Enter the year of the movie: ");
+					String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
+					String d = menu.getString("Enter the director of the movie: ");
+					String username = menu.getString("Enter your username: ");
+					User user = null;
+					for (User u : usersList.getUsers()) {
+						if (u.getUsername().equals(username)) {
+							user = u;
+							break;
+						}
+					}
+					if (user == null) {
+						System.out.println("User not found.");
+						System.exit(2);
+					}
+					Movie newMovie = new Movie(t, y, List.of(g), d);
+					newMovie.setUser(user);
+					moviesList.addMovie(newMovie);
+					System.out.println("Movie added successfully.");
+					
 					break;
 				case 2:
 				// Get details
 					break;
 
-				case 3:
+				case 3: // delete movie
 					boolean isVerified = false;
 					boolean isFound = false;
 					System.out.println(
 							"Regular users can only remove their own movies.\nVerified users can remove any movie.\n");
-					String username = menu.getString("You are user: ");
-					for (User user : usersList.getUsers()) {
-						if (user.getUsername().equals(username) && user.checkIsVerified()) {
+					String uname = menu.getString("You are user: ");
+					for (User u : usersList.getUsers()) {
+						if (u.getUsername().equals(uname) && u.checkIsVerified()) {
 							System.out.println("You are a verified user.");
 							isVerified = isFound = true;
 							break;
-						} else if (user.getUsername().equals(username) && !user.checkIsVerified()) {
+						} else if (u.getUsername().equals(uname) && !u.checkIsVerified()) {
 							System.out.println("You are a regular user.");
 							isFound = true;
 							break;
@@ -87,7 +109,7 @@ public class Main {
 							if (isVerified) {
 								moviesList.removeMovie(movie);
 								System.out.println("Movie removed successfully.");
-							} else if (movie.getUser().getUsername().equals(username)) {
+							} else if (movie.getUser().getUsername().equals(uname)) {
 								moviesList.removeMovie(movie);
 								System.out.println("Movie removed successfully.");
 							} else {
@@ -100,8 +122,8 @@ public class Main {
 					}
 
 					break;
-				case 4:
-					// compare movie
+				case 4: // compare movies
+					
 					break;
 				case 5:
 					MainMenu(new Menu());

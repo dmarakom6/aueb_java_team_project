@@ -31,14 +31,24 @@ public class Main {
 		int i = 0; // number of results
 		for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
 
+			boolean matched = false;
+			// Check if input is a number (for rating)
+			try {
+				double rating = Double.parseDouble(searchinput);
+				if (Math.abs(movietemp.getAverageRating() - rating) < 0.01) {
+					matched = true;
+				}
+			} catch (NumberFormatException e) {
+				// Not a number, continue to check title and genres
+			}
+			// Check title and genres
 			if (movietemp.getTitle().equalsIgnoreCase(searchinput)
 					|| movietemp.getGenres().contains(searchinput)
-					|| movietemp.getAverageRating() == Integer.parseInt(searchinput)) {
+					|| matched) {
 				i++;
 				System.out.print("(" + i + "): ");
 				System.out.println(movietemp); // get details of each movie using the toString() method.
 				menu.pressContinue();
-
 			}
 		}
 		if (i == 0) {
@@ -54,7 +64,7 @@ public class Main {
 		String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
 		String d = menu.getString("Enter the director of the movie: ");
 		String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
-		int i=0;
+		int i = 0;
 		for (String m : r) {
 			for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
 				if (movietemp.getTitle().equalsIgnoreCase(m.trim())) {
@@ -140,6 +150,30 @@ public class Main {
 
 	}
 
+	public static void getTopMovies(Menu menu) {
+		int l = moviesList.getMovies().size();
+		int n = menu.getInt("Number of Movies to show (1-" + l + "): ");
+		int r = menu.getInt("Minimum number of reviews: ");
+		if (r < 0) {
+			System.out.println("Invalid number. Please try again.");
+			menu.pressContinue();
+			return;
+		}
+		if (n < 1 || n > l) {
+			System.out.println("Invalid number. Please try again.");
+			menu.pressContinue();
+			return;
+		}
+		System.out.println("Top " + n + " movies with more than " + r + " reviews:\n");
+		List<Movie> topMovies = moviesList.sortMoviesByRating();
+		for (int i = 0; i < Math.min(n, topMovies.size()); i++) {
+			if (topMovies.get(i).getReviews().size() >= r) {
+				System.out.println((i + 1) + ": " + topMovies.get(i));
+			}
+		}
+		menu.pressContinue();
+	}
+
 	public static void addReview(Menu menu) {
 		boolean found = false;
 		String movieTitle = menu.getString("Enter movie title: ");
@@ -164,7 +198,7 @@ public class Main {
 				} else {
 					System.out.println("You are a regular user.");
 				}
-				int rating = menu.getInt("Enter rating (1-10): ");
+				int rating = menu.getInt("Enter rating (integer 1-10): ");
 				rating = menu.isValidRating(rating);
 				if (rating == -1) {
 					System.exit(2);
@@ -184,6 +218,49 @@ public class Main {
 			menu.pressContinue();
 		}
 
+	}
+
+	public static void getReviewDetails(Menu menu) {
+		boolean found = false;
+		String reviewTitle = menu.getString("Enter the title of the movie: ");
+		for (Movie movie : moviesList.getMovies()) {
+			if (movie.getTitle().equalsIgnoreCase(reviewTitle)) {
+				found = true;
+				System.out.println("Reviews for " + movie.getTitle() + ":");
+				for (Review review : movie.getReviews()) {
+					System.out.println(review);
+				}
+				menu.pressContinue();
+			}
+
+		}
+		if (!found) {
+			System.out.println("Movie not found.");
+			menu.pressContinue();
+		}
+	}
+
+	public static void deleteReview(Menu menu) {
+		boolean found = false;
+		String title = menu.getString("Enter the title of the movie: ");
+		String username = menu.getString("Enter your username: ");
+		for (Movie movie : moviesList.getMovies()) {
+			if (movie.getTitle().equalsIgnoreCase(title)) {
+				for (Review review : movie.getReviews()) {
+					if (review.getUser().getUsername().equalsIgnoreCase(username)) {
+						movie.removeReview(review);
+						found = true;
+						System.out.println("Review deleted successfully.");
+						menu.sleep();
+						break;
+					}
+				}
+				if (!found) {
+					System.out.println("Review by user '" + username + "' not found.");
+					menu.pressContinue();
+				}
+			}
+		}
 	}
 
 	// menus
@@ -234,7 +311,10 @@ public class Main {
 				case 4: // compare movies
 
 					break;
-				case 5: // back
+				case 5: // get top movies
+					getTopMovies(menu);
+					break;
+				case 6: // back
 					MainMenu(new Menu());
 					return;
 				default:
@@ -265,26 +345,10 @@ public class Main {
 					addReview(menu);
 					break;
 				case 2: // Get Review details
-					boolean found = false;
-					String reviewTitle = menu.getString("Enter the title of the movie: ");
-					for (Movie movie : moviesList.getMovies()) {
-						if (movie.getTitle().equalsIgnoreCase(reviewTitle)) {
-							found = true;
-							System.out.println("Reviews for " + movie.getTitle() + ":");
-							for (Review review : movie.getReviews()) {
-								System.out.println(review);
-							}
-							menu.pressContinue();
-						}
-
-					}
-					if (!found) {
-						System.out.println("Movie not found.");
-						menu.pressContinue();
-					}
+					getReviewDetails(menu);
 					break;
 				case 3: // Delete review
-					// TODO - dm
+					deleteReview(menu);
 					break;
 				case 4: // back
 					MainMenu(new Menu());

@@ -36,6 +36,11 @@ public class MoviesList {
         return null;
     }
 
+    public List<Movie> sortMoviesByRating() {
+        movies.sort((m1, m2) -> Double.compare(m2.getAverageRating(), m1.getAverageRating())); // Modern way to sort without comparators.
+        return movies;
+    }
+
     public void initializeSampleMovies() {
         // Sample movies
         Movie movie1 = new Movie("Inception", 2010, new User("JohnDoe", ""), List.of("Action", "Sci-Fi"), "Christopher Nolan", new ArrayList<>());

@@ -15,6 +15,10 @@ public abstract class Review implements Printable {
         this.movie = movie;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public abstract int getWeightedRating();
 
     public void printDetails() {

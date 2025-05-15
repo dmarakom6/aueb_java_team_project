@@ -9,7 +9,7 @@ public class VerifiedReview extends Review {
     }
 
     public int getWeightedRating() {
-        return (int) Math.round(rating * 1.5); // Verified reviews are worth more
+        return Math.min(10, (int) Math.round(rating * 1.5)); // Cap weighted rating at 10
     }
 
     public String getVerificationCode() {

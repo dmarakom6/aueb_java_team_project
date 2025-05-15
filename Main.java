@@ -11,8 +11,10 @@
 import utils.menus.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import data.*;
 import types.*;
@@ -309,7 +311,49 @@ public class Main {
 					deleteMovie(menu);
 					break;
 				case 4: // compare movies
+					String title1 = menu.getString("Enter name of movie 1: ");
+					String title2 = menu.getString("Enter name of movie 2: ");
+					int i = 0;
+					Movie movie1 = null;
+					Movie movie2 = null;
+					for (Movie movietemp : moviesList.getMovies()) {
 
+						if (movietemp.getTitle().equalsIgnoreCase(title1)) {
+							movie1 = movietemp;
+							break;
+
+						}
+					}
+					if (movie1 == null) {
+						System.out.println("No movie with the first title was found.");
+						System.exit(2);
+					}
+					for (Movie movietemp : moviesList.getMovies()) {
+						if (movietemp.getTitle().equalsIgnoreCase(title2)) {
+							movie2 = movietemp;
+							break;
+						}
+					}
+					if (movie2 == null) {
+						System.out.println("No movie with the second title was found.");
+						System.exit(2);
+					}
+					if (title1 == title2) {
+						System.out.println("No differences found, movies typed were the same.");
+					} else {
+						System.out.println("Differences found: ");
+						System.out.println("Title of movie 1: " + title1 + "\nTitle of movie 2: " + title2);
+						if (movie1.getYear() != movie2.getYear()) {
+							System.out.println("Release year of movie 1: " + movie1.getYear()
+									+ "\nRelease year of movie 2: " + movie2.getYear());
+						}
+
+						if (movie1.getDirector() != movie2.getDirector()) {
+							System.out.println("Director of movie 1: " + movie1.getDirector()
+									+ "\nDirector of movie 2: " + movie2.getDirector());
+						}
+					}
+					// to implement difference of genres and reviews
 					break;
 				case 5: // get top movies
 					getTopMovies(menu);

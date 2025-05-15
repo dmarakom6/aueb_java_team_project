@@ -105,10 +105,12 @@ public class Main {
 							movietemp.printDetails(); // get details of each movie
 							menu.pressContinue();
 
+
 						}
 					}
 					if (i == 0) {
 						System.out.println("No movies with matching title/genre/rating found.");
+						menu.pressContinue();
 					}
 
 					break;

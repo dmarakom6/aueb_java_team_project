@@ -32,7 +32,8 @@ public class Main {
 		for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
 
 			if (movietemp.getTitle().equalsIgnoreCase(searchinput)
-					|| movietemp.getGenres().contains(searchinput)) {
+					|| movietemp.getGenres().contains(searchinput)
+					|| movietemp.getAverageRating() == Integer.parseInt(searchinput)) {
 				i++;
 				System.out.print("(" + i + "): ");
 				System.out.println(movietemp); // get details of each movie using the toString() method.
@@ -282,8 +283,8 @@ public class Main {
 						menu.pressContinue();
 					}
 					break;
-				case 3:
-					// Delete review
+				case 3: // Delete review
+					// TODO - dm
 					break;
 				case 4: // back
 					MainMenu(new Menu());

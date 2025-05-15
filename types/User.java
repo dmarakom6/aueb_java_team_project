@@ -31,6 +31,10 @@ public class User implements Printable {
         return verificationCode;
     }
 
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
         public boolean checkIsVerified() {
         return this.verificationCode != null;
     }

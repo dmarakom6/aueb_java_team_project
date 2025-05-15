@@ -128,4 +128,8 @@ public class Movie implements Printable {
         System.out.println("Ratings: " + reviews + " (" + getAverageRating() + ")\n");
     }
 
+    // public String toString() {
+        
+    // }
+
 }

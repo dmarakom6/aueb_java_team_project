@@ -179,8 +179,10 @@ public class Main {
 			}
 		} else if (menu instanceof UserToolsMenu) {
 			switch (s) {
-				case 1:
-					// Add user
+				case 1: // Add user
+					String username = menu.getString("\nEnter new username: ");
+					String verificationCode = menu.getString("Enter Verification Code (or Enter to skip): ");
+					// TODO - vd
 					break;
 				case 2:
 					// Remove user

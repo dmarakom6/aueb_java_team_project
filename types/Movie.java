@@ -131,7 +131,7 @@ public class Movie implements Printable {
             "Year: " + year + "\n" +
             "Genres: " + genres + "\n" +
             "Director: " + director + "\n" +
-            "Related Movies: " + relatedMovies + "\n" +
+            "Related Movies (Titles): " + relatedMovies.stream().map(Movie::getTitle).toList() + "\n" +  // map to get titles of related movies
             "Ratings: " + reviews.stream().map(Review::getWeightedRating).toList() + " (" + getAverageRating() + ")\n"; // show al ratings in list
     }
 

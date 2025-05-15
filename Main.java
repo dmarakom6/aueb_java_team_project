@@ -53,18 +53,19 @@ public class Main {
 		String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
 		String d = menu.getString("Enter the director of the movie: ");
 		String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
+		int i=0;
 		for (String m : r) {
-			for (Movie movietemp : moviesList.getMovies()) {
-				if (movietemp.getTitle().equalsIgnoreCase(m)) {
+			for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
+				if (movietemp.getTitle().equalsIgnoreCase(m.trim())) {
 					relmovies.add(movietemp);
+					i++;
+					System.out.println("Movie  '" + m.trim() + "' was found.");
 				} else if (m.isEmpty()) {
 					continue;
-				} else {
-					System.out.println("Movie  '" + m + "' was not found.");
-					System.exit(2);
 				}
 			}
 		}
+		System.out.println("Found " + i + "/" + r.length + " given related movies.");
 		String username = menu.getString("Enter your username: ");
 		User user = null;
 		for (User u : usersList.getUsers()) {

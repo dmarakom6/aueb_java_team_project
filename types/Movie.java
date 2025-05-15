@@ -12,9 +12,10 @@ public class Movie implements Printable {
     private List<Review> reviews;
     private List<Movie> relatedMovies;
 
-    public Movie(String title, int year, List<String> genres, String director) {
+    public Movie(String title, int year, User user, List<String> genres, String director) {
         this.title = title;
         this.year = year;
+        this.user = user;
         this.genres = new ArrayList<>(genres);
         this.director = director;
         this.reviews = new ArrayList<Review>();
@@ -110,14 +111,21 @@ public class Movie implements Printable {
         return (double) total / reviews.size();
     }
 
+        public void printRelatedMovies() {
+        System.out.println("Related Movies: ");
+        for (Movie m : relatedMovies) {
+            System.out.println(m.getTitle());
+        }
+    }
+
     public void printDetails() {
         System.out.println("Title: " + title);
-        System.out.println("Added by: " + user);
+        System.out.println("Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)"));
         System.out.println("Year: " + year);
         System.out.println("Genres: " + genres);
         System.out.println("Director: " + director);
-        System.out.println("Ratings: " + reviews + " (" + getAverageRating() + ")");
+        this.printRelatedMovies();
+        System.out.println("Ratings: " + reviews + " (" + getAverageRating() + ")\n");
     }
-    // Getters and other utility methods can be added here like getTitle(),
-    // getYear(), etc.
+
 }

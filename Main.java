@@ -10,7 +10,6 @@
 
 import utils.menus.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import data.*;
@@ -73,114 +72,34 @@ public class Main {
 						System.out.println("User not found.");
 						System.exit(2);
 					}
-					Movie newMovie = new Movie(t, y, List.of(g), d);
+					Movie newMovie = new Movie(t, y, user, List.of(g), d);
 					newMovie.setUser(user);
 					moviesList.addMovie(newMovie);
 					System.out.println("Movie added successfully.");
+					menu.sleep();
+					break;
+				case 2: // get details
+					String searchinput = menu.getString("Enter the title/genre/rating of the movie: ");
+					System.out.println("Movies matching your search: ");
+					int i = 0; // number of results
+					for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
+
+						if (movietemp.getTitle().equalsIgnoreCase(searchinput)
+								|| movietemp.getGenres().contains(searchinput)
+								) {
+						i++;
+						System.out.print("(" + i + "): ");
+						movietemp.printDetails(); // get details of each movie
+						menu.pressContinue();
+
+
+						}
+					}
+					if (i == 0) {
+						System.out.println("No movies with matching title/genre/rating found.");
+					}
 
 					break;
-				case 2:
-					// Get details
-					String searchinput = menu.getString("Enter the title/genre/rating of the movie: ");
-					int timesfound = 0;
-					for (int i = 0; i < moviesList.size(); i++) {
-						Movie movietemp = moviesList.getMovie(i);
-
-						if (movietemp.getTitle().equalsIgnoreCase(searchinput)) {
-							timesfound += 1;
-							String title123 = movietemp.getTitle();
-							String year123 = String.valueOf(movietemp.getYear());
-							String genre123 = (movietemp.getGenres()).toString();
-							String director123 = movietemp.getDirector();
-							String reviews123 = (movietemp.getReviews()).toString();
-							String relmovies123 = (movietemp.getRelatedMovies()).toString();
-							if (timesfound == 1) {
-								System.err.println("Movies matching your search: ");
-							}
-							System.out.println("Result " + timesfound + ":");
-							System.out.println("\n" + "Title: " + title123);
-							System.out.println("Year of Release: " + year123);
-							System.out.println("Genre/Genres: " + genre123);
-							System.out.println("Director: " + director123);
-							System.out.println("Reviews: " + reviews123);
-							System.out.println("Relevant Movies: " + relmovies123);
-
-						}
-					}
-					if (timesfound == 0) {
-						System.out.println("No movies with this title were found.");
-					}
-					// genre starts here
-					int timesfound3 = 0;
-					for (int i2 = 0; i2 < moviesList.size(); i2++) {
-						Movie movietemp3 = moviesList.getMovie(i2);
-						List<String> genrestemp = movietemp3.getGenres();
-						for (int i3 = 0; i3 < genrestemp.size(); i3++) {
-							if ((genrestemp.get(i3)).equalsIgnoreCase(searchinput)) {
-								timesfound3 += 1;
-								String title12 = movietemp3.getTitle();
-								String year12 = String.valueOf(movietemp3.getYear());
-								String genre12 = (movietemp3.getGenres()).toString();
-								String director12 = movietemp3.getDirector();
-								String reviews12 = (movietemp3.getReviews()).toString();
-								String relmovies12 = (movietemp3.getRelatedMovies()).toString();
-								if (timesfound3 == 1) {
-									System.err.println("Movies matching your search: ");
-								}
-								System.out.println("Result " + timesfound3 + ":");
-								System.out.println("\n" + "Title: " + title12);
-								System.out.println("Year of Release: " + year12);
-								System.out.println("Genre/Genres: " + genre12);
-								System.out.println("Director: " + director12);
-								System.out.println("Reviews: " + reviews12);
-								System.out.println("Relevant Movies: " + relmovies12);
-
-							}
-						}
-						if (timesfound3 == 0) {
-							System.out.println("No movies with this genre were found.");
-						}
-						// rating starts here
-						double ratingIwant = -1.0;
-						try {
-							int ratingInt = Integer.parseInt(searchinput);
-							ratingIwant = Double.valueOf(ratingInt);
-						} catch (NumberFormatException exInt) {
-							try {
-								ratingIwant = Double.parseDouble(searchinput);
-							} catch (NumberFormatException exDouble) {
-
-							}
-						}
-						if (ratingIwant > -1.0) {
-							int timesfound2 = 0;
-							for (int i = 0; i < moviesList.size(); i++) {
-								Movie movietemp2 = moviesList.getMovie(i);
-								if (movietemp2.getAverageRating() == ratingIwant) {
-									timesfound2 += 1;
-									String title1 = movietemp2.getTitle();
-									String year1 = String.valueOf(movietemp2.getYear());
-									String genre1 = (movietemp2.getGenres()).toString();
-									String director1 = movietemp2.getDirector();
-									String reviews1 = (movietemp2.getReviews()).toString();
-									String relmovies1 = (movietemp2.getRelatedMovies()).toString();
-									if (timesfound == 1) {
-										System.err.println("Movies with the rating you typed: ");
-									}
-									System.out.println("Result " + timesfound2 + ":");
-									System.out.println("\n" + "Title: " + title1);
-									System.out.println("Year of Release: " + year1);
-									System.out.println("Genre/Genres: " + genre1);
-									System.out.println("Director: " + director1);
-									System.out.println("Reviews: " + reviews1);
-									System.out.println("Relevant Movies: " + relmovies1);
-
-								}
-
-							}
-						}
-						break;
-					}
 
 				case 3: // delete movie
 					boolean isVerified = false;
@@ -275,7 +194,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		usersList.initializeSampleUsers(); // Initialize sample users here
+		moviesList.initializeSampleMovies(); // Initialize sample movies here
+		reviewsList.initializeSampleReviews(); // Initialize sample reviews here
+		// Initialize the menu
 		Menu menu = new Menu();
-		Main.MainMenu(menu);
+		while (true) {
+			Main.MainMenu(menu);
+		}
 	}
 }

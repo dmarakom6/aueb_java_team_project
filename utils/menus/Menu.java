@@ -1,5 +1,6 @@
 package utils.menus;
 
+import java.util.concurrent.TimeUnit;
 
 public class Menu extends Input {
     public void printMenu() {
@@ -11,10 +12,26 @@ public class Menu extends Input {
         System.out.println("4. Exit\n");
     }
 
-    public void clearScreen() {  
-        System.out.print("\033[H\033[2J");  
-        System.out.flush();  
-    } 
+    public void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    public void sleep() {
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupted status
+        }
+    }
+
+    public void pressContinue() {
+        System.out.println("Press Enter key to continue...");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+        }
+    }
 
     public void init() {
         this.clearScreen();
@@ -22,5 +39,3 @@ public class Menu extends Input {
     }
 
 }
-
-

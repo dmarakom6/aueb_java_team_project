@@ -10,16 +10,16 @@ public class Movie implements Printable {
     private List<String> genres;
     private String director;
     private List<Review> reviews;
-    private List<Movie> relatedMovies;
+    private ArrayList<Movie> relatedMovies;
 
-    public Movie(String title, int year, User user, List<String> genres, String director) {
+    public Movie(String title, int year, User user, List<String> genres, String director, ArrayList<Movie> relatedMovies) {
         this.title = title;
         this.year = year;
         this.user = user;
         this.genres = new ArrayList<>(genres);
         this.director = director;
         this.reviews = new ArrayList<Review>();
-        this.relatedMovies = new ArrayList<Movie>();
+        this.relatedMovies = new ArrayList<Movie>(relatedMovies);
     }
 
     public String getTitle() {

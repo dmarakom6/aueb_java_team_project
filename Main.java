@@ -10,6 +10,7 @@
 
 import utils.menus.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.*;
@@ -56,10 +57,22 @@ public class Main {
 		if (menu instanceof MovieToolsMenu) {
 			switch (s) {
 				case 1: // add movie
+					ArrayList<Movie> relmovies = new ArrayList<>();
 					String t = menu.getString("Enter the title of the movie: ");
 					int y = menu.getInt("Enter the year of the movie: ");
 					String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
 					String d = menu.getString("Enter the director of the movie: ");
+					String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
+					for ( String m : r) {
+						for (Movie movietemp : moviesList.getMovies()) {
+							if (movietemp.getTitle().equalsIgnoreCase(m)) {
+								relmovies.add(movietemp);
+							} else {
+								System.out.println("Movie  '" + m + "' was not found.");
+								System.exit(2);
+							}
+						}
+					}
 					String username = menu.getString("Enter your username: ");
 					User user = null;
 					for (User u : usersList.getUsers()) {
@@ -72,7 +85,7 @@ public class Main {
 						System.out.println("User not found.");
 						System.exit(2);
 					}
-					Movie newMovie = new Movie(t, y, user, List.of(g), d);
+					Movie newMovie = new Movie(t, y, user, List.of(g), d, relmovies);
 					newMovie.setUser(user);
 					moviesList.addMovie(newMovie);
 					System.out.println("Movie added successfully.");

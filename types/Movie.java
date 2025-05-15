@@ -1,6 +1,7 @@
 package types;
 
 import java.util.*;
+import java.text.*;
 import types.interfaces.Printable;
 
 public class Movie implements Printable {
@@ -128,8 +129,14 @@ public class Movie implements Printable {
         System.out.println("Ratings: " + reviews + " (" + getAverageRating() + ")\n");
     }
 
-    // public String toString() {
-        
-    // }
+    public String toString() {
+        return "Title: " + title + "\n" +
+                "Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)") + "\n" +
+                "Year: " + year + "\n" +
+                "Genres: " + genres + "\n" +
+                "Director: " + director + "\n" +
+                "Related Movies: " + relatedMovies + "\n" +
+                "Ratings: " + reviews + "\n";
+    }
 
 }

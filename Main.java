@@ -102,7 +102,7 @@ public class Main {
 								|| movietemp.getGenres().contains(searchinput)) {
 							i++;
 							System.out.print("(" + i + "): ");
-							movietemp.printDetails(); // get details of each movie
+							System.out.println(movietemp); // get details of each movie using the toString() method.
 							menu.pressContinue();
 
 

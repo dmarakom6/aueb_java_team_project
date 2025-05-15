@@ -26,9 +26,9 @@ public class UsersList {
 
     public void initializeSampleUsers() {
         // Replace with actual User constructor and fields
-        User user1 = new User("JohnDoe", "");
+        User user1 = new User("JohnDoe", null);
         User user2 = new User("JaneSmith", "12345");
-        User user3 = new User("AliceBrown", "");
+        User user3 = new User("AliceBrown", null);
 
         users.addAll(Arrays.asList(user1, user2, user3));
     }

@@ -32,12 +32,7 @@ public class User implements Printable {
     }
 
         public boolean checkIsVerified() {
-        if (this.getVerificationCode() == null) {
-            System.out.println("User is not verified.");
-            return false;
-        }
-        System.out.println("User is verified.");
-        return true;
+        return this.verificationCode != null;
     }
     public void printDetails() {
         System.out.println("User: " + username);

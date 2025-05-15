@@ -11,6 +11,7 @@
 import utils.menus.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import data.*;
@@ -63,7 +64,7 @@ public class Main {
 					String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
 					String d = menu.getString("Enter the director of the movie: ");
 					String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
-					for ( String m : r) {
+					for (String m : r) {
 						for (Movie movietemp : moviesList.getMovies()) {
 							if (movietemp.getTitle().equalsIgnoreCase(m)) {
 								relmovies.add(movietemp);
@@ -98,13 +99,11 @@ public class Main {
 					for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
 
 						if (movietemp.getTitle().equalsIgnoreCase(searchinput)
-								|| movietemp.getGenres().contains(searchinput)
-								) {
-						i++;
-						System.out.print("(" + i + "): ");
-						movietemp.printDetails(); // get details of each movie
-						menu.pressContinue();
-
+								|| movietemp.getGenres().contains(searchinput)) {
+							i++;
+							System.out.print("(" + i + "): ");
+							movietemp.printDetails(); // get details of each movie
+							menu.pressContinue();
 
 						}
 					}
@@ -123,6 +122,13 @@ public class Main {
 					for (User u : usersList.getUsers()) {
 						if (u.getUsername().equals(uname) && u.checkIsVerified()) {
 							System.out.println("You are a verified user.");
+							String vc = menu.getString("Enter your verification code: ");
+							if (u.getVerificationCode().equals(vc)) {
+								System.out.println("Verification code is correct.");
+							} else {
+								System.out.println("Verification code is incorrect.");
+								System.exit(2);
+							}
 							isVerified = isFound = true;
 							break;
 						} else if (u.getUsername().equals(uname) && !u.checkIsVerified()) {
@@ -136,17 +142,23 @@ public class Main {
 						System.exit(2);
 					}
 					String title = menu.getString("Enter the title of the movie to remove: ");
-					for (Movie movie : moviesList.getMovies()) {
-						if (movie.getTitle().equals(title)) {
+					Iterator<Movie> iterator = moviesList.getMovies().iterator();
+					while (iterator.hasNext()) {
+						Movie movie = iterator.next();
+						if (movie.getTitle().equalsIgnoreCase(title)) {
 							if (isVerified) {
-								moviesList.removeMovie(movie);
+								iterator.remove(); // Safely removes the movie
 								System.out.println("Movie removed successfully.");
+								menu.sleep();
 							} else if (movie.getUser().getUsername().equals(uname)) {
-								moviesList.removeMovie(movie);
+								iterator.remove(); // Safely removes the movie
 								System.out.println("Movie removed successfully.");
+								menu.sleep();
 							} else {
 								System.out.println("You are not authorized to remove this movie.");
+								menu.pressContinue();
 							}
+							break;
 						} else {
 							System.out.println("Movie not found.");
 							System.exit(2);

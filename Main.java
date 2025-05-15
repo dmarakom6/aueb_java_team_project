@@ -21,8 +21,170 @@ public class Main {
 
 	public static MoviesList moviesList = new MoviesList();
 	public static UsersList usersList = new UsersList();
-	// usersList.initializeSampleUsers(); // Moved to the main method
 	public static ReviewsList reviewsList = new ReviewsList();
+
+	// utilities
+	public static void getMovieDetails(Menu menu) {
+		String searchinput = menu.getString(
+				"Enter the title/genre/rating of the movie: ");
+		System.out.println("Movies matching your search: ");
+		int i = 0; // number of results
+		for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
+
+			if (movietemp.getTitle().equalsIgnoreCase(searchinput)
+					|| movietemp.getGenres().contains(searchinput)) {
+				i++;
+				System.out.print("(" + i + "): ");
+				System.out.println(movietemp); // get details of each movie using the toString() method.
+				menu.pressContinue();
+
+			}
+		}
+		if (i == 0) {
+			System.out.println("No movies with matching title/genre/rating found.");
+			menu.pressContinue();
+		}
+	}
+
+	public static void addMovie(Menu menu) {
+		ArrayList<Movie> relmovies = new ArrayList<>();
+		String t = menu.getString("Enter the title of the movie: ");
+		int y = menu.getInt("Enter the year of the movie: ");
+		String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
+		String d = menu.getString("Enter the director of the movie: ");
+		String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
+		for (String m : r) {
+			for (Movie movietemp : moviesList.getMovies()) {
+				if (movietemp.getTitle().equalsIgnoreCase(m)) {
+					relmovies.add(movietemp);
+				} else if (m.isEmpty()) {
+					continue;
+				} else {
+					System.out.println("Movie  '" + m + "' was not found.");
+					System.exit(2);
+				}
+			}
+		}
+		String username = menu.getString("Enter your username: ");
+		User user = null;
+		for (User u : usersList.getUsers()) {
+			if (u.getUsername().equals(username)) {
+				user = u;
+				break;
+			}
+		}
+		if (user == null) {
+			System.out.println("User not found.");
+			System.exit(2);
+		}
+		Movie newMovie = new Movie(t, y, user, List.of(g), d, relmovies);
+		newMovie.setUser(user);
+		moviesList.addMovie(newMovie);
+		System.out.println("Movie added successfully.");
+		menu.sleep();
+	}
+
+	public static void deleteMovie(Menu menu) {
+		boolean isVerified = false;
+		boolean isFound = false;
+		System.out.println(
+				"Regular users can only remove their own movies.\nVerified users can remove any movie.\n");
+		String uname = menu.getString("You are user: ");
+		for (User u : usersList.getUsers()) {
+			if (u.getUsername().equals(uname) && u.checkIsVerified()) {
+				System.out.println("You are a verified user.");
+				String vc = menu.getString("Enter your verification code: ");
+				if (u.getVerificationCode().equals(vc)) {
+					System.out.println("Verification code is correct.");
+				} else {
+					System.out.println("Verification code is incorrect.");
+					System.exit(2);
+				}
+				isVerified = isFound = true;
+				break;
+			} else if (u.getUsername().equals(uname) && !u.checkIsVerified()) {
+				System.out.println("You are a regular user.");
+				isFound = true;
+				break;
+			}
+		}
+		if (!isFound) {
+			System.out.println("User not found.");
+			System.exit(2);
+		}
+		String title = menu.getString("Enter the title of the movie to remove: ");
+		Iterator<Movie> iterator = moviesList.getMovies().iterator();
+		while (iterator.hasNext()) {
+			Movie movie = iterator.next();
+			if (movie.getTitle().equalsIgnoreCase(title)) {
+				if (isVerified) {
+					iterator.remove(); // Safely removes the movie
+					System.out.println("Movie removed successfully.");
+					menu.sleep();
+				} else if (movie.getUser().getUsername().equals(uname)) {
+					iterator.remove(); // Safely removes the movie
+					System.out.println("Movie removed successfully.");
+					menu.sleep();
+				} else {
+					System.out.println("You are not authorized to remove this movie.");
+					menu.pressContinue();
+				}
+				break;
+			} else {
+				System.out.println("Movie not found.");
+				System.exit(2);
+			}
+		}
+
+	}
+
+	public static void addReview(Menu menu) {
+		boolean found = false;
+		String movieTitle = menu.getString("Enter movie title: ");
+		for (Movie movie : moviesList.getMovies()) {
+			if (movie.getTitle().equalsIgnoreCase(movieTitle)) {
+				found = true;
+				String username = menu.getString("Enter your username: ");
+				User user = null;
+				for (User u : usersList.getUsers()) {
+					if (u.getUsername().equals(username)) {
+						user = u;
+						break;
+					}
+				}
+				if (user == null) {
+					System.out.println("User not found.");
+					menu.pressContinue();
+					break;
+				}
+				if (user.checkIsVerified()) {
+					System.out.println("You are a verified user.");
+				} else {
+					System.out.println("You are a regular user.");
+				}
+				int rating = menu.getInt("Enter rating (1-10): ");
+				rating = menu.isValidRating(rating);
+				if (rating == -1) {
+					System.exit(2);
+				}
+				String comment = menu.getString("Enter comment (Enter to skip): ");
+				Review review = user.checkIsVerified() ? new BasicReview(user, rating, comment, movie)
+						: new VerifiedReview(user, rating, comment, movie, user.getVerificationCode());
+				movie.addReview(review);
+				reviewsList.addReview(review);
+				System.out.println("Review added successfully.");
+				menu.sleep();
+			}
+
+		}
+		if (!found) {
+			System.out.println("Movie not found.");
+			menu.pressContinue();
+		}
+
+	}
+
+	// menus
 
 	public static void MainMenu(Menu menu) {
 		menu.init();
@@ -58,115 +220,14 @@ public class Main {
 		if (menu instanceof MovieToolsMenu) {
 			switch (s) {
 				case 1: // add movie
-					ArrayList<Movie> relmovies = new ArrayList<>();
-					String t = menu.getString("Enter the title of the movie: ");
-					int y = menu.getInt("Enter the year of the movie: ");
-					String[] g = menu.getString("Enter the genres of the movie (comma separated): ").split(",");
-					String d = menu.getString("Enter the director of the movie: ");
-					String[] r = menu.getString("Enter related movies (comma separated or Enter to skip): ").split(",");
-					for (String m : r) {
-						for (Movie movietemp : moviesList.getMovies()) {
-							if (movietemp.getTitle().equalsIgnoreCase(m)) {
-								relmovies.add(movietemp);
-							} else {
-								System.out.println("Movie  '" + m + "' was not found.");
-								System.exit(2);
-							}
-						}
-					}
-					String username = menu.getString("Enter your username: ");
-					User user = null;
-					for (User u : usersList.getUsers()) {
-						if (u.getUsername().equals(username)) {
-							user = u;
-							break;
-						}
-					}
-					if (user == null) {
-						System.out.println("User not found.");
-						System.exit(2);
-					}
-					Movie newMovie = new Movie(t, y, user, List.of(g), d, relmovies);
-					newMovie.setUser(user);
-					moviesList.addMovie(newMovie);
-					System.out.println("Movie added successfully.");
-					menu.sleep();
+					addMovie(menu);
 					break;
 				case 2: // get details
-					String searchinput = menu.getString("Enter the title/genre/rating of the movie: ");
-					System.out.println("Movies matching your search: ");
-					int i = 0; // number of results
-					for (Movie movietemp : moviesList.getMovies()) { // for every movie in the current list of movies
-
-						if (movietemp.getTitle().equalsIgnoreCase(searchinput)
-								|| movietemp.getGenres().contains(searchinput)) {
-							i++;
-							System.out.print("(" + i + "): ");
-							System.out.println(movietemp); // get details of each movie using the toString() method.
-							menu.pressContinue();
-
-
-						}
-					}
-					if (i == 0) {
-						System.out.println("No movies with matching title/genre/rating found.");
-						menu.pressContinue();
-					}
-
+					getMovieDetails(menu);
 					break;
 
 				case 3: // delete movie
-					boolean isVerified = false;
-					boolean isFound = false;
-					System.out.println(
-							"Regular users can only remove their own movies.\nVerified users can remove any movie.\n");
-					String uname = menu.getString("You are user: ");
-					for (User u : usersList.getUsers()) {
-						if (u.getUsername().equals(uname) && u.checkIsVerified()) {
-							System.out.println("You are a verified user.");
-							String vc = menu.getString("Enter your verification code: ");
-							if (u.getVerificationCode().equals(vc)) {
-								System.out.println("Verification code is correct.");
-							} else {
-								System.out.println("Verification code is incorrect.");
-								System.exit(2);
-							}
-							isVerified = isFound = true;
-							break;
-						} else if (u.getUsername().equals(uname) && !u.checkIsVerified()) {
-							System.out.println("You are a regular user.");
-							isFound = true;
-							break;
-						}
-					}
-					if (!isFound) {
-						System.out.println("User not found.");
-						System.exit(2);
-					}
-					String title = menu.getString("Enter the title of the movie to remove: ");
-					Iterator<Movie> iterator = moviesList.getMovies().iterator();
-					while (iterator.hasNext()) {
-						Movie movie = iterator.next();
-						if (movie.getTitle().equalsIgnoreCase(title)) {
-							if (isVerified) {
-								iterator.remove(); // Safely removes the movie
-								System.out.println("Movie removed successfully.");
-								menu.sleep();
-							} else if (movie.getUser().getUsername().equals(uname)) {
-								iterator.remove(); // Safely removes the movie
-								System.out.println("Movie removed successfully.");
-								menu.sleep();
-							} else {
-								System.out.println("You are not authorized to remove this movie.");
-								menu.pressContinue();
-							}
-							break;
-						} else {
-							System.out.println("Movie not found.");
-							System.exit(2);
-						}
-					}
-
+					deleteMovie(menu);
 					break;
 				case 4: // compare movies
 
@@ -198,11 +259,27 @@ public class Main {
 			}
 		} else if (menu instanceof ReviewToolsMenu) {
 			switch (s) {
-				case 1:
-					// Add review
+				case 1: // Add review
+					addReview(menu);
 					break;
-				case 2:
-					// Get review details
+				case 2: // Get Review details
+					boolean found = false;
+					String reviewTitle = menu.getString("Enter the title of the movie: ");
+					for (Movie movie : moviesList.getMovies()) {
+						if (movie.getTitle().equalsIgnoreCase(reviewTitle)) {
+							found = true;
+							System.out.println("Reviews for " + movie.getTitle() + ":");
+							for (Review review : movie.getReviews()) {
+								System.out.println(review);
+							}
+							menu.pressContinue();
+						}
+
+					}
+					if (!found) {
+						System.out.println("Movie not found.");
+						menu.pressContinue();
+					}
 					break;
 				case 3:
 					// Delete review
@@ -223,8 +300,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		usersList.initializeSampleUsers(); // Initialize sample users here
-		moviesList.initializeSampleMovies(); // Initialize sample movies here
-		reviewsList.initializeSampleReviews(); // Initialize sample reviews here
+		moviesList.initializeSampleMovies(); // Initialize sample movies here and connect existin users
 		// Initialize the menu
 		Menu menu = new Menu();
 		while (true) {

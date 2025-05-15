@@ -80,11 +80,7 @@ public class Movie implements Printable {
     }
 
     public void addReview(Review r) {
-        reviews.add((BasicReview) r);
-    }
-
-    public void addVerifiedReview(VerifiedReview r) {
-        reviews.add(r);
+        reviews.add(r); // could be verified or basic.
     }
 
     public void updateReview(Review oldReview, Review newReview) {
@@ -131,12 +127,12 @@ public class Movie implements Printable {
 
     public String toString() {
         return "Title: " + title + "\n" +
-                "Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)") + "\n" +
-                "Year: " + year + "\n" +
-                "Genres: " + genres + "\n" +
-                "Director: " + director + "\n" +
-                "Related Movies: " + relatedMovies + "\n" +
-                "Ratings: " + reviews + "\n";
+            "Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)") + "\n" +
+            "Year: " + year + "\n" +
+            "Genres: " + genres + "\n" +
+            "Director: " + director + "\n" +
+            "Related Movies: " + relatedMovies + "\n" +
+            "Ratings: " + reviews.stream().map(Review::getWeightedRating).toList() + " (" + getAverageRating() + ")\n"; // show al ratings in list
     }
 
 }

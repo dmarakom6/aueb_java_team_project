@@ -18,6 +18,14 @@ public class Input {
         return selection;
     }
 
+    public int isValidRating(int rating) {
+        if (rating < 0 || rating > 10) {
+            System.out.println("Invalid rating. Please enter a rating between 0 and 10.");
+            return -1;
+        }
+        return rating;
+    }
+
 
     public String getString(String message) {
         System.out.print(message);

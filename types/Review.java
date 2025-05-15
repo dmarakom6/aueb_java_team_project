@@ -22,4 +22,8 @@ public abstract class Review implements Printable {
     if (comment != null && !comment.isEmpty())
     System.out.println("Comments: " + comment);
     }
+
+    public String toString() {
+        return user.getUsername() + " rated " + movie.getTitle() + " with " + rating + "/10" + "\nComments: " + (comment == "" ? "-" : comment);
+    }
 }

@@ -28,7 +28,7 @@ public class Main {
 
 	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which
 																// returns true when an item is not in a list
-		return g -> !list.contains(g);
+		return g -> !list.contains(g); //the condition is based on this lambda
 	}
 
 	// utilities

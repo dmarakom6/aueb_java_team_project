@@ -1,8 +1,8 @@
-package data;
+
 
 import java.util.ArrayList;
 
-import types.*;
+
 
 
 public class ReviewsList {

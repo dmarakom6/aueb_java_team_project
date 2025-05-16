@@ -1,7 +1,5 @@
-package types;
-
 import java.util.*;
-import types.interfaces.Printable;
+
 
 public class User implements Printable {
     protected String username;
@@ -14,7 +12,11 @@ public class User implements Printable {
 
 
     public void addReview(Review r) {
-        reviews.add((BasicReview) r);
+        reviews.add(r);
+    }
+
+    public void removeReview(Review r) {
+        reviews.remove(r);
     }
 
     public String getUsername() {

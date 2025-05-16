@@ -1,11 +1,8 @@
-package data;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-import types.Movie;
-import types.User;
-import types.VerifiedUser;
 
 public class MoviesList {
     private ArrayList<Movie> movies;

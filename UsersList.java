@@ -1,9 +1,8 @@
-package data;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import types.*;
 
 public class UsersList {
     private ArrayList<User> users;

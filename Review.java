@@ -1,6 +1,3 @@
-package types;
-import types.interfaces.Printable;
-
 
 public abstract class Review implements Printable {
     protected User user;

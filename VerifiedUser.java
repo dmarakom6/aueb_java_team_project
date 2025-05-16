@@ -1,4 +1,3 @@
-package types;
 
 public class VerifiedUser extends User {
     private String verificationCode;

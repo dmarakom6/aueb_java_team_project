@@ -1,8 +1,6 @@
-package types;
 
 import java.util.*;
-import java.text.*;
-import types.interfaces.Printable;
+
 
 public class Movie implements Printable {
     private String title;

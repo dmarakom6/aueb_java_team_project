@@ -1,4 +1,3 @@
-package types;
 
 public class BasicReview extends Review {
 

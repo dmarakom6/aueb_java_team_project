@@ -1,4 +1,3 @@
-package types;
 
 public class VerifiedReview extends Review {
 

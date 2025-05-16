@@ -28,7 +28,7 @@ public class Main {
 
 	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which
 																// returns true when an item is not in a list
-		return g -> !list.contains(g); //the condition is based on this lambda
+		return g -> !list.contains(g); // the condition is based on this lambda
 	}
 
 	// utilities
@@ -366,8 +366,6 @@ public class Main {
 									+ "\nDirector of movie 2: " + movie2.getDirector());
 						}
 					}
-					// to implement difference of genres and reviews
-
 					List<String> gen1 = movie1.getGenres();
 					List<String> gen2 = movie2.getGenres();
 					List<String> difgen = Stream.concat(gen1.stream().filter(notIn(gen2)),
@@ -381,6 +379,26 @@ public class Main {
 						System.out.println("The different genres between the two movies are: " + difgen);
 
 					}
+					List<String> rev1 = new ArrayList<>();
+					List<String> rev2 = new ArrayList<>();
+					for (Review rev : movie1.getReviews()) {
+						rev1.add(rev.toString());
+					}
+					for (Review rev : movie2.getReviews()) {
+						rev2.add(rev.toString());
+					}
+					List<String> difrev = Stream.concat(rev1.stream().filter(notIn(rev2)),
+							rev2.stream().filter(notIn(rev1))).collect(Collectors.toList());
+					if (difrev.isEmpty()) {
+
+						System.out.println("The movies have the same reviews.");
+
+					} else {
+
+						System.out.println("The different reviews between the two movies are: " + difrev);
+
+					}
+
 					break;
 				case 5: // get top movies
 					getTopMovies(menu);

@@ -412,15 +412,55 @@ public class Main {
 		} else if (menu instanceof UserToolsMenu) {
 			switch (s) {
 				case 1: // Add user
-					String username = menu.getString("\nEnter new username: ");
+					boolean taken = false;
+					String username;
+					do {
+						taken = false;
+						username = menu.getString("\nEnter new username: ");
+						for (User newuser : usersList.getUsers()) {
+							if (username.equals(newuser.getUsername())) {
+								System.out.println("Username is already taken. Try again.");
+								taken = true;
+								break;
+							}
+						}
+					} while (taken);
 					String verificationCode = menu.getString("Enter Verification Code (or Enter to skip): ");
-					// TODO - vd
+					if (!verificationCode.isEmpty()) {
+						VerifiedUser newverifieduser = new VerifiedUser(username, verificationCode);
+					} else {
+						User newuser = new User(username);
+					}
 					break;
 				case 2:
 					// Remove user
+					String input = menu.getString("\nEnter username of user to remove: ");
+					boolean found = false;
+					for (User usertemp : usersList.getUsers()) {
+						if (input == usertemp.getUsername()) {
+							found = true;
+							usersList.removeUser(usertemp);
+							break;
+						}
+					}
+					if (!found) {
+						System.out.println("Username does not exist.");
+					}
 					break;
 				case 3:
 					// Search user
+					String usersearch = menu.getString("\nSearch username: ");
+					found = false;
+					for (User usertemp : usersList.getUsers()) {
+						if (usersearch == usertemp.getUsername()) {
+							found = true;
+							usertemp.printDetails();
+							break;
+						}
+					}
+					if (!found) {
+						System.out.println("Username does not exist.");
+					}
 					break;
 				case 4:
 					MainMenu(new Menu());

@@ -26,7 +26,8 @@ public class Main {
 	public static UsersList usersList = new UsersList();
 	public static ReviewsList reviewsList = new ReviewsList();
 
-	private static Predicate<String> notIn(List<String> list) {
+	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which
+																// returns true when an item is not in a list
 		return g -> !list.contains(g);
 	}
 
@@ -380,7 +381,6 @@ public class Main {
 						System.out.println("The different genres between the two movies are: " + difgen);
 
 					}
-
 					break;
 				case 5: // get top movies
 					getTopMovies(menu);

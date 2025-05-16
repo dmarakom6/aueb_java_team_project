@@ -3,7 +3,7 @@ package data;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import types.User;
+import types.*;
 
 public class UsersList {
     private ArrayList<User> users;
@@ -26,9 +26,9 @@ public class UsersList {
 
     public void initializeSampleUsers() {
         // Replace with actual User constructor and fields
-        User user1 = new User("JohnDoe", null);
-        User user2 = new User("JaneSmith", "12345");
-        User user3 = new User("AliceBrown", null);
+        User user1 = new User("JohnDoe");
+        User user2 = new VerifiedUser("JaneSmith", "12345");
+        User user3 = new User("AliceBrown");
 
         users.addAll(Arrays.asList(user1, user2, user3));
     }

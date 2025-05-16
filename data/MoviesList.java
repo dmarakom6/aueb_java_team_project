@@ -5,6 +5,7 @@ import java.util.List;
 
 import types.Movie;
 import types.User;
+import types.VerifiedUser;
 
 public class MoviesList {
     private ArrayList<Movie> movies;
@@ -48,9 +49,9 @@ public class MoviesList {
 
     public void initializeSampleMovies() {
         // Sample movies
-        Movie movie1 = new Movie("Inception", 2010, new User("JohnDoe", ""), List.of("Action", "Sci-Fi"), "Christopher Nolan", new ArrayList<>());
-        Movie movie2 = new Movie("The Godfather", 1972, new User("JohnDoe", ""), List.of("Crime", "Drama"), "Francis Ford Coppola", new ArrayList<>());
-        Movie movie3 = new Movie("The Dark Knight", 2008, new User("JaneSmith", "12345"), List.of("Action", "Crime"), "Christopher Nolan", new ArrayList<>());
+        Movie movie1 = new Movie("Inception", 2010, new User("JohnDoe"), List.of("Action", "Sci-Fi"), "Christopher Nolan", new ArrayList<>());
+        Movie movie2 = new Movie("The Godfather", 1972, new User("JohnDoe"), List.of("Crime", "Drama"), "Francis Ford Coppola", new ArrayList<>());
+        Movie movie3 = new Movie("The Dark Knight", 2008, new VerifiedUser("JaneSmith", "12345"), List.of("Action", "Crime"), "Christopher Nolan", new ArrayList<>());
         // Add sample movies to the list
         addMovie(movie1);
         addMovie(movie2);

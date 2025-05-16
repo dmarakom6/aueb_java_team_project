@@ -117,7 +117,7 @@ public class Movie implements Printable {
 
     public void printDetails() {
         System.out.println("Title: " + title);
-        System.out.println("Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)"));
+        System.out.println("Added by: " + user.username + " " + (user instanceof VerifiedUser ? "(Verified)" : "(Not Verified)"));
         System.out.println("Year: " + year);
         System.out.println("Genres: " + genres);
         System.out.println("Director: " + director);
@@ -127,7 +127,7 @@ public class Movie implements Printable {
 
     public String toString() {
         return "Title: " + title + "\n" +
-            "Added by: " + user.username + " " + (user.getVerificationCode() == null ? "(Verified)" : "(Not Verified)") + "\n" +
+            "Added by: " + user.username + " " + (user instanceof VerifiedUser ? "(Verified)" : "(Not Verified)") + "\n" +
             "Year: " + year + "\n" +
             "Genres: " + genres + "\n" +
             "Director: " + director + "\n" +

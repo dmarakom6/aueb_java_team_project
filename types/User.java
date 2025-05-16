@@ -5,7 +5,6 @@ import types.interfaces.Printable;
 
 public class User implements Printable {
     protected String username;
-    protected String verificationCode;
     protected List<Review> reviews;
 
     public User(String username) {
@@ -13,14 +12,9 @@ public class User implements Printable {
         this.reviews = new ArrayList<Review>();
     }
 
-    public User(String username, String verificationCode) { // only for verified users
-        this.username = username;
-        this.verificationCode = verificationCode;
-        this.reviews = new ArrayList<Review>();
-    }
 
     public void addReview(Review r) {
-        reviews.add(this.verificationCode == null ? r : (VerifiedReview) r); // new reviews are verified if user is too
+        reviews.add((BasicReview) r);
     }
 
     public String getUsername() {
@@ -28,18 +22,14 @@ public class User implements Printable {
     }
 
     public String getVerificationCode() {
-        return verificationCode;
+        return null; // Password is not stored in this class
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-
-        public boolean checkIsVerified() {
-        return this.verificationCode != null;
+    public boolean checkIsVerified() {
+     return false; // User is not verified by default
     }
     public void printDetails() {
-        System.out.println("User: " + username);
+        System.out.println("User: " + username + " (Not Verified)");
         System.out.println("Reviews submitted: " + reviews.size());
     }
 }

@@ -197,6 +197,14 @@ public class Main {
 				}
 				if (user.checkIsVerified()) {
 					System.out.println("You are a verified user.");
+					String verificationCode = menu.getString("Enter your verification code: ");
+					if ((user.getVerificationCode().equals(verificationCode))) {
+						System.out.println("Verification code is correct.");
+					} else {
+						System.out.println("Verification code is incorrect.");
+						menu.pressContinue();
+						break;
+					}
 				} else {
 					System.out.println("You are a regular user.");
 				}
@@ -207,7 +215,7 @@ public class Main {
 				}
 				String comment = menu.getString("Enter comment (Enter to skip): ");
 				Review review = user.checkIsVerified() ? new BasicReview(user, rating, comment, movie)
-						: new VerifiedReview(user, rating, comment, movie, user.getVerificationCode());
+						: new VerifiedReview((VerifiedUser)user, rating, comment, movie);
 				movie.addReview(review);
 				reviewsList.addReview(review);
 				System.out.println("Review added successfully.");

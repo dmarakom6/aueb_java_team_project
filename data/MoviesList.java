@@ -37,7 +37,12 @@ public class MoviesList {
     }
 
     public List<Movie> sortMoviesByRating() {
-        movies.sort((m1, m2) -> Double.compare(m2.getAverageRating(), m1.getAverageRating())); // Modern way to sort without comparators.
+        movies.sort(new java.util.Comparator<Movie>() {
+            @Override
+            public int compare(Movie m1, Movie m2) {
+                return Double.compare(m2.getAverageRating(), m1.getAverageRating());
+            }
+        });
         return movies;
     }
 

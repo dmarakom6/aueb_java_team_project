@@ -11,10 +11,12 @@
 import utils.menus.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import data.*;
 import types.*;
@@ -215,7 +217,7 @@ public class Main {
 				}
 				String comment = menu.getString("Enter comment (Enter to skip): ");
 				Review review = user.checkIsVerified() ? new BasicReview(user, rating, comment, movie)
-						: new VerifiedReview((VerifiedUser)user, rating, comment, movie);
+						: new VerifiedReview((VerifiedUser) user, rating, comment, movie);
 				movie.addReview(review);
 				reviewsList.addReview(review);
 				System.out.println("Review added successfully.");
@@ -362,6 +364,20 @@ public class Main {
 						}
 					}
 					// to implement difference of genres and reviews
+					List<String> gen1 = movie1.getGenres();
+					List<String> gen2 = movie2.getGenres();
+					List<String> rev1 = movie1.getReviews();
+					List<String> rev2 = movie2.getReviews();
+					Stream<String> gen1 = movie1.getGenres().
+					Set<String> difgen = Stream.concat(, null)
+					
+
+					
+					
+					
+					
+					
+					
 					break;
 				case 5: // get top movies
 					getTopMovies(menu);

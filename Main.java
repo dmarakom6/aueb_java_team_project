@@ -12,12 +12,11 @@ import utils.menus.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import java.util.function.Predicate;
 import data.*;
 import types.*;
 
@@ -26,6 +25,9 @@ public class Main {
 	public static MoviesList moviesList = new MoviesList();
 	public static UsersList usersList = new UsersList();
 	public static ReviewsList reviewsList = new ReviewsList();
+	private static Predicate<String> notIn(List<String> list) {
+        return g -> !list.contains(g);
+    }
 
 	// utilities
 	public static void getMovieDetails(Menu menu) {
@@ -357,27 +359,18 @@ public class Main {
 							System.out.println("Release year of movie 1: " + movie1.getYear()
 									+ "\nRelease year of movie 2: " + movie2.getYear());
 						}
-
 						if (movie1.getDirector() != movie2.getDirector()) {
 							System.out.println("Director of movie 1: " + movie1.getDirector()
 									+ "\nDirector of movie 2: " + movie2.getDirector());
 						}
 					}
 					// to implement difference of genres and reviews
+
 					List<String> gen1 = movie1.getGenres();
 					List<String> gen2 = movie2.getGenres();
-					List<String> rev1 = movie1.getReviews();
-					List<String> rev2 = movie2.getReviews();
-					Stream<String> gen1 = movie1.getGenres().
-					Set<String> difgen = Stream.concat(, null)
-					
+					List<String> difgen = Stream.concat(gen1.stream().filter(notIn(gen2)),
+							gen2.stream().filter(notIn(gen1))).collect(Collectors.toList());
 
-					
-					
-					
-					
-					
-					
 					break;
 				case 5: // get top movies
 					getTopMovies(menu);

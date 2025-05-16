@@ -25,9 +25,10 @@ public class Main {
 	public static MoviesList moviesList = new MoviesList();
 	public static UsersList usersList = new UsersList();
 	public static ReviewsList reviewsList = new ReviewsList();
+
 	private static Predicate<String> notIn(List<String> list) {
-        return g -> !list.contains(g);
-    }
+		return g -> !list.contains(g);
+	}
 
 	// utilities
 	public static void getMovieDetails(Menu menu) {
@@ -370,6 +371,15 @@ public class Main {
 					List<String> gen2 = movie2.getGenres();
 					List<String> difgen = Stream.concat(gen1.stream().filter(notIn(gen2)),
 							gen2.stream().filter(notIn(gen1))).collect(Collectors.toList());
+					if (difgen.isEmpty()) {
+
+						System.out.println("The movies have the same genres.");
+
+					} else {
+
+						System.out.println("The different genres between the two movies are: " + difgen);
+
+					}
 
 					break;
 				case 5: // get top movies

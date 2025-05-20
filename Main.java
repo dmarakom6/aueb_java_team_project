@@ -154,25 +154,28 @@ public class Main {
 
 	}
 
-	public static void getTopMovies(Menu menu) {
+	public static void getTopMovies(Menu menu, boolean byReviews) {
 		int l = moviesList.getMovies().size();
 		int n = menu.getInt("Number of Movies to show (1-" + l + "): ");
-		int r = menu.getInt("Minimum number of reviews: ");
-		if (r < 0) {
+		int r = !byReviews ? menu.getInt("Minimum number of reviews: ") : reviewsList.getReviews().size();
+		if (r < 0 || n < 1 || n > l) {
 			System.out.println("Invalid number. Please try again.");
 			menu.pressContinue();
 			return;
 		}
-		if (n < 1 || n > l) {
-			System.out.println("Invalid number. Please try again.");
-			menu.pressContinue();
-			return;
-		}
-		System.out.println("Top " + n + " movies with more than " + r + " reviews:\n");
-		List<Movie> topMovies = moviesList.sortMoviesByRating();
-		for (int i = 0; i < Math.min(n, topMovies.size()); i++) {
-			if (topMovies.get(i).getReviews().size() >= r) {
+		if (byReviews) {
+			System.out.println("Top " + n + " movies by review count:\n");
+			List<Movie> topMovies = moviesList.sortMoviesByReviews();
+			for (int i = 0; i < Math.min(n, topMovies.size()); i++) {
 				System.out.println((i + 1) + ": " + topMovies.get(i));
+			}
+		} else {
+			System.out.println("Top " + n + " movies with more than " + r + " reviews:\n");
+			List<Movie> topMovies = moviesList.sortMoviesByRating();
+			for (int i = 0; i < Math.min(n, topMovies.size()); i++) {
+				if (topMovies.get(i).getReviews().size() >= r) {
+					System.out.println((i + 1) + ": " + topMovies.get(i));
+				}
 			}
 		}
 		menu.pressContinue();
@@ -458,109 +461,126 @@ public class Main {
 		}
 	}
 
+	// menus
 
-// menus
+	public static void MainMenu(Menu menu) {
+		menu.init();
+		Integer s = menu.getInt("Enter an option: ");
+		switch (s) {
+			case 1:
+				menu = new MovieToolsMenu();
+				break;
+			case 2:
+				menu = new UserToolsMenu();
+				break;
+			case 3:
+				menu = new ReviewToolsMenu();
+				break;
+			case 4:
+				System.out.println("Exiting...");
+				System.exit(0);
+				break;
+			default:
+				if (s instanceof Integer) {
+					System.out.println("An error occurred. Rerun the program and try again.");
+				}
+				System.exit(2);
+		}
 
-public static void MainMenu(Menu menu) {
-	menu.init();
-	Integer s = menu.getInt("Enter an option: ");
-	switch (s) {
-		case 1:
-			menu = new MovieToolsMenu();
-			break;
-		case 2:
-			menu = new UserToolsMenu();
-			break;
-		case 3:
-			menu = new ReviewToolsMenu();
-			break;
-		case 4:
-			System.out.println("Exiting...");
-			System.exit(0);
-			break;
-		default:
-			if (s instanceof Integer) {
-				System.out.println("An error occurred. Rerun the program and try again.");
+		InnerMenu(menu);
+
+	}
+
+	public static void InnerMenu(Menu menu) {
+		menu.init();
+		int s = menu.getInt("Enter an option: ");
+		if (menu instanceof MovieToolsMenu) {
+			switch (s) {
+				case 1: // add movie
+					addMovie(menu);
+					break;
+				case 2: // get details
+					getMovieDetails(menu);
+					break;
+
+				case 3: // delete movie
+					deleteMovie(menu);
+					break;
+				case 4: // compare movies
+					compareMovies(menu);
+					break;
+				case 5: // list movies innermenu
+					InnerMenu(new ListMoviesMenu());
+					break;
+				case 6: // back
+					MainMenu(new Menu());
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
 			}
+		} else if (menu instanceof UserToolsMenu) {
+			switch (s) {
+				case 1: // Add user
+					addUser(menu);
+					break;
+				case 2: // Search user
+					searchUser(menu);
+					break;
+				case 3: // back
+					MainMenu(new Menu());
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
+			}
+		} else if (menu instanceof ReviewToolsMenu) {
+			switch (s) {
+				case 1: // Add review
+					addReview(menu);
+					break;
+				case 2: // Get Review details
+					getReviewDetails(menu);
+					break;
+				case 3: // Delete review
+					deleteReview(menu);
+					break;
+				case 4: // back
+					MainMenu(new Menu());
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
+			}
+		} else if (menu instanceof ListMoviesMenu) {
+			switch (s) {
+				case 1: // Organize by genre
+					moviesList.printTopMoviesByGenre(moviesList.getMovies().size());
+					menu.pressContinue();
+					break;
+				case 2: // List top movies by reviews
+					getTopMovies(menu, true);
+					break;
+				case 3: // List top movies by rating and reviews
+					getTopMovies(menu, false);
+					break;
+				case 4: // back
+					InnerMenu(new MovieToolsMenu());
+					return;
+				default:
+					System.out.println("Invalid selection. Please try again.");
+			}
+		} else {
+			System.out.println("An error occurred. Rerun the program and try again.");
 			System.exit(2);
-	}
 
-	InnerMenu(menu);
-
-}
-
-public static void InnerMenu(Menu menu) {
-	menu.init();
-	int s = menu.getInt("Enter an option: ");
-	if (menu instanceof MovieToolsMenu) {
-		switch (s) {
-			case 1: // add movie
-				addMovie(menu);
-				break;
-			case 2: // get details
-				getMovieDetails(menu);
-				break;
-
-			case 3: // delete movie
-				deleteMovie(menu);
-				break;
-			case 4: // compare movies
-				compareMovies(menu);
-				break;
-			case 5: // get top movies
-				getTopMovies(menu);
-				break;
-			case 6: // back
-				MainMenu(new Menu());
-				return;
-			default:
-				System.out.println("Invalid selection. Please try again.");
 		}
-	} else if (menu instanceof UserToolsMenu) {
-		switch (s) {
-			case 1: // Add user
-				addUser(menu);
-				break;
-			case 2: // Search user
-				searchUser(menu);
-				break;
-			case 3: // back
-				MainMenu(new Menu());
-				return;
-			default:
-				System.out.println("Invalid selection. Please try again.");
-		}
-	} else if (menu instanceof ReviewToolsMenu) {
-		switch (s) {
-			case 1: // Add review
-				addReview(menu);
-				break;
-			case 2: // Get Review details
-				getReviewDetails(menu);
-				break;
-			case 3: // Delete review
-				deleteReview(menu);
-				break;
-			case 4: // back
-				MainMenu(new Menu());
-				return;
-			default:
-				System.out.println("Invalid selection. Please try again.");
-		}
-	} else {
-		System.out.println("An error occurred. Rerun the program and try again.");
-		System.exit(2);
 
 	}
 
-}
-
-public static void main(String[] args) {
-	// Initialize the menu
-	Menu menu = new Menu();
-	initializeData(menu);
-	while (true) {
-		MainMenu(menu);
+	public static void main(String[] args) {
+		// Initialize the menu
+		Menu menu = new Menu();
+		initializeData(menu);
+		while (true) {
+			MainMenu(menu);
+		}
 	}
-}
 }

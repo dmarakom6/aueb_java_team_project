@@ -477,6 +477,9 @@ public class Main {
 				menu = new ReviewToolsMenu();
 				break;
 			case 4:
+				menu = new StatisticsToolsMenu();
+				break;
+			case 5:
 				System.out.println("Exiting...");
 				System.exit(0);
 				break;
@@ -566,6 +569,25 @@ public class Main {
 					return;
 				default:
 					System.out.println("Invalid selection. Please try again.");
+			}
+		} else if (menu instanceof StatisticsToolsMenu) {
+			switch (s) {
+				case 1:
+					// todo (use printTopMoviesByGenre(n=?))
+					break;
+				case 2:
+					// todo
+					break;
+				case 3:
+					// todo
+					break;
+				case 4: // back
+					MainMenu(new Menu());
+					break;
+
+				default:
+					System.out.println("Invalid selection. Please try again.");
+					return;
 			}
 		} else {
 			System.out.println("An error occurred. Rerun the program and try again.");

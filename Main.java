@@ -8,8 +8,6 @@
 
 */
 
-
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,14 +15,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.function.Predicate;
 
-
 public class Main {
 
 	public static MoviesList moviesList = new MoviesList();
 	public static UsersList usersList = new UsersList();
 	public static ReviewsList reviewsList = new ReviewsList();
 
-	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which on its turn returns true when an item is not in a list
+	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which
+																// on its turn returns true when an item is not in a
+																// list
 		return g -> !list.contains(g); // the condition is based on this lambda
 	}
 
@@ -211,7 +210,7 @@ public class Main {
 		} else {
 			System.out.println("Differences found: ");
 			if (movie1.getYear() != movie2.getYear()) {
-				System.out.println("Release year of " + title1 + ": "  + movie1.getYear()
+				System.out.println("Release year of " + title1 + ": " + movie1.getYear()
 						+ "\nRelease year of " + title1 + ": " + movie2.getYear());
 			}
 			if (movie1.getDirector() != movie2.getDirector()) {
@@ -403,109 +402,165 @@ public class Main {
 		}
 		menu.pressContinue();
 	}
-	// menus
 
-	public static void MainMenu(Menu menu) {
-		menu.init();
-		Integer s = menu.getInt("Enter an option: ");
-		switch (s) {
-			case 1:
-				menu = new MovieToolsMenu();
-				break;
-			case 2:
-				menu = new UserToolsMenu();
-				break;
-			case 3:
-				menu = new ReviewToolsMenu();
-				break;
-			case 4:
-				System.out.println("Exiting...");
-				System.exit(0);
-				break;
-			default:
-				if (s instanceof Integer) {
-					System.out.println("An error occurred. Rerun the program and try again.");
-				}
-				System.exit(2);
-		}
-
-		InnerMenu(menu);
-
-	}
-
-	public static void InnerMenu(Menu menu) {
-		menu.init();
-		int s = menu.getInt("Enter an option: ");
-		if (menu instanceof MovieToolsMenu) {
-			switch (s) {
-				case 1: // add movie
-					addMovie(menu);
-					break;
-				case 2: // get details
-					getMovieDetails(menu);
-					break;
-
-				case 3: // delete movie
-					deleteMovie(menu);
-					break;
-				case 4: // compare movies
-					compareMovies(menu);
-					break;
-				case 5: // get top movies
-					getTopMovies(menu);
-					break;
-				case 6: // back
-					MainMenu(new Menu());
-					return;
-				default:
-					System.out.println("Invalid selection. Please try again.");
-			}
-		} else if (menu instanceof UserToolsMenu) {
-			switch (s) {
-				case 1: // Add user
-					addUser(menu);
-					break;
-				case 2: // Search user
-					searchUser(menu);
-					break;
-				case 3: // back
-					MainMenu(new Menu());
-					return;
-				default:
-					System.out.println("Invalid selection. Please try again.");
-			}
-		} else if (menu instanceof ReviewToolsMenu) {
-			switch (s) {
-				case 1: // Add review
-					addReview(menu);
-					break;
-				case 2: // Get Review details
-					getReviewDetails(menu);
-					break;
-				case 3: // Delete review
-					deleteReview(menu);
-					break;
-				case 4: // back
-					MainMenu(new Menu());
-					return;
-				default:
-					System.out.println("Invalid selection. Please try again.");
-			}
-		} else {
-			System.out.println("An error occurred. Rerun the program and try again.");
-			System.exit(2);
-
-		}
-
-	}
-
-	public static void main(String[] args) {
+	public static void initializeData(Menu menu) {
 		usersList.initializeSampleUsers(); // Initialize sample users here
 		moviesList.initializeSampleMovies(); // Initialize sample movies here and connect existin users
-		// Initialize the menu
-		Menu menu = new Menu();
-		while (true) {
-			Main.MainMenu(menu);
+		// grab sample csv review data from the web
+		ArrayList<List<String>> data = new Data().getData();
+		// parse to the lists
+		for (int i = 1; i < data.size(); i++) {
+			List<String> line = data.get(i);
+			String title = line.get(0);
+			int year = Integer.parseInt(line.get(1));
+			String[] genres = line.get(2).split(",");
+			String username = line.get(3);
+			int rating = Integer.parseInt(line.get(4));
+			String comment = line.get(5);
+
+			// Find or create user
+			User user = null;
+			for (User u : usersList.getUsers()) {
+				if (u.getUsername().equals(username)) {
+					user = u;
+					break;
+				}
+			}
+			if (user == null) {
+				user = new User(username);
+				usersList.addUser(user);
+			}
+
+			// Find or create movie
+			Movie movie = null;
+			for (Movie m : moviesList.getMovies()) {
+				if (m.getTitle().equals(title)) {
+					movie = m;
+					break;
+				}
+			}
+			if (movie == null) {
+				movie = new Movie(title, year, user, List.of(genres), "Unknown", new ArrayList<>());
+				moviesList.addMovie(movie);
+			}
+
+			// Create and add review
+			Review review = user.checkIsVerified()
+					? new VerifiedReview((VerifiedUser) user, rating, comment, movie)
+					: new BasicReview(user, rating, comment, movie);
+			movie.addReview(review);
+			user.addReview(review);
+			reviewsList.addReview(review);
+		}
+
+		for (Movie m : moviesList.getMovies()) {
+			System.out.println(m);
 		}
 	}
+
+
+// menus
+
+public static void MainMenu(Menu menu) {
+	menu.init();
+	Integer s = menu.getInt("Enter an option: ");
+	switch (s) {
+		case 1:
+			menu = new MovieToolsMenu();
+			break;
+		case 2:
+			menu = new UserToolsMenu();
+			break;
+		case 3:
+			menu = new ReviewToolsMenu();
+			break;
+		case 4:
+			System.out.println("Exiting...");
+			System.exit(0);
+			break;
+		default:
+			if (s instanceof Integer) {
+				System.out.println("An error occurred. Rerun the program and try again.");
+			}
+			System.exit(2);
+	}
+
+	InnerMenu(menu);
+
+}
+
+public static void InnerMenu(Menu menu) {
+	menu.init();
+	int s = menu.getInt("Enter an option: ");
+	if (menu instanceof MovieToolsMenu) {
+		switch (s) {
+			case 1: // add movie
+				addMovie(menu);
+				break;
+			case 2: // get details
+				getMovieDetails(menu);
+				break;
+
+			case 3: // delete movie
+				deleteMovie(menu);
+				break;
+			case 4: // compare movies
+				compareMovies(menu);
+				break;
+			case 5: // get top movies
+				getTopMovies(menu);
+				break;
+			case 6: // back
+				MainMenu(new Menu());
+				return;
+			default:
+				System.out.println("Invalid selection. Please try again.");
+		}
+	} else if (menu instanceof UserToolsMenu) {
+		switch (s) {
+			case 1: // Add user
+				addUser(menu);
+				break;
+			case 2: // Search user
+				searchUser(menu);
+				break;
+			case 3: // back
+				MainMenu(new Menu());
+				return;
+			default:
+				System.out.println("Invalid selection. Please try again.");
+		}
+	} else if (menu instanceof ReviewToolsMenu) {
+		switch (s) {
+			case 1: // Add review
+				addReview(menu);
+				break;
+			case 2: // Get Review details
+				getReviewDetails(menu);
+				break;
+			case 3: // Delete review
+				deleteReview(menu);
+				break;
+			case 4: // back
+				MainMenu(new Menu());
+				return;
+			default:
+				System.out.println("Invalid selection. Please try again.");
+		}
+	} else {
+		System.out.println("An error occurred. Rerun the program and try again.");
+		System.exit(2);
+
+	}
+
+}
+
+public static void main(String[] args) {
+	// Initialize the menu
+	Menu menu = new Menu();
+	initializeData(menu);
+	while (true) {
+		MainMenu(menu);
+	}
+}
 }

@@ -103,8 +103,7 @@ public class Movie implements Printable {
         for (Review r : reviews) {
             total += r.getWeightedRating();
         }
-        return (double) total / reviews.size();
-    }
+        return Math.round((double) total / reviews.size() * 100) / 100.0;} // round to 2 decimal places
 
         public void printRelatedMovies() {
         System.out.println("Related Movies: ");

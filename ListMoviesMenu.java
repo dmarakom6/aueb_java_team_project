@@ -6,7 +6,7 @@ public class ListMoviesMenu extends Menu {
         System.out.println("1. Organize by Genre");
         System.out.println("2. List Top Movies by Rating"); // highest avgrating
         System.out.println("3. List Top Movies by Rating and Reviews"); // most reviews in reviewsList
-        System.out.println("4. Back to Movies Menu");
+        System.out.println("4. Back to Movies Menu\n");
     }
 
     public void clearScreen() {

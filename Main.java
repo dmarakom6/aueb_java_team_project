@@ -570,6 +570,18 @@ public class Main {
 				default:
 					System.out.println("Invalid selection. Please try again.");
 			}
+		} else if (menu instanceof RecommendMovieMenu) {
+			switch (s) {
+				case 1:
+					//content based
+					break;
+				case 2:
+					//user based
+					break;
+				default:
+					MainMenu(new Menu());
+					break;
+			}
 		} else if (menu instanceof StatisticsToolsMenu) {
 			switch (s) {
 				case 1:

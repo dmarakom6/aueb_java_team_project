@@ -15,6 +15,19 @@ public class User implements Printable {
         reviews.add(r);
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public Review getReviewForMovie(Movie movie) {
+        for (Review r : this.reviews) {
+            if (r.getMovie().getTitle().equals(movie.getTitle())) {
+                return r;
+            }
+        }
+        return null;
+    }
+
     public void removeReview(Review r) {
         reviews.remove(r);
     }

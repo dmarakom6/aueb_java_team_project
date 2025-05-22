@@ -408,7 +408,8 @@ public class Main {
 
 	public static void initializeData(Menu menu) {
 		usersList.initializeSampleUsers(); // Initialize sample users here
-		// moviesList.initializeSampleMovies(); // Initialize sample movies here and connect existin users
+		// moviesList.initializeSampleMovies(); // Initialize sample movies here and
+		// connect existin users
 		// grab sample csv review data from the web
 		ArrayList<List<String>> data = new Data().getData();
 		// parse to the lists
@@ -499,6 +500,7 @@ public class Main {
 
 	public static void InnerMenu(Menu menu) {
 		menu.init();
+		User user = null;
 		int s = menu.getInt("Enter an option: ");
 		if (menu instanceof MovieToolsMenu) {
 			switch (s) {
@@ -575,41 +577,42 @@ public class Main {
 			}
 		} else if (menu instanceof RecommendMovieMenu) {
 			String uname = menu.getString("Enter your username: ");
-			boolean found = false;
 			for (User u : usersList.getUsers()) {
 				if (u.getUsername().equals(uname)) {
-					found = true;
-					User user = u;
-					ArrayList<Movie> moviesViewed = new ArrayList<>();
-					System.out.println("User found.");
-					for (Movie m : moviesList.getMovies()) {
-						if (m.getUser().getUsername().equals(uname)) {
-							moviesViewed.add(m);
-						}
-						
-					}
-					Recommender recommender = new Recommender(user, moviesViewed);
-					switch (s) {
-						case 1:
-							recommender.filterContentBased(moviesList.getMovies(), reviewsList.getReviews());
-							menu.pressContinue();
-							break;
-						case 2:
-							recommender.filterUserBased();
-							menu.pressContinue();
-							break;
-						default:
-							MainMenu(new Menu());
-							break;
-					}
-
+					user = u;
+					break;
 				}
-
 			}
-			if (!found) {
+			if (user != null) {
+				ArrayList<Movie> moviesViewed = new ArrayList<>();
+				System.out.println("User found.");
+				for (Movie m : moviesList.getMovies()) {
+					if (m.getUser().getUsername().equals(uname)) {
+						moviesViewed.add(m);
+					}
+				}
+				Recommender recommender = new Recommender(user, moviesViewed);
+				switch (s) {
+					case 1:
+						recommender.filterContentBased(moviesList.getMovies(), reviewsList.getReviews());
+						menu.pressContinue();
+						break;
+					case 2:
+						recommender.filterUserBased(usersList.getUsers());
+						menu.pressContinue();
+						break;
+					case 3:
+						MainMenu(new Menu());
+						return;
+					default:
+						System.out.println("Invalid input.");
+						System.exit(2);
+				}
+			} else {
 				System.out.println("User not found.");
 				menu.pressContinue();
 			}
+
 		} else if (menu instanceof StatisticsToolsMenu) {
 			switch (s) {
 				case 1:

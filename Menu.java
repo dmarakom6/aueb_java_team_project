@@ -10,7 +10,8 @@ public class Menu extends Input {
         System.out.println("2. User Tools");
         System.out.println("3. Review Tools");
         System.out.println("4. Statistics Tools");
-        System.out.println("5. Exit\n");
+        System.out.println("5. Recommend a Movie");
+        System.out.println("6. Exit\n");
     }
 
     public void clearScreen() {

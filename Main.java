@@ -480,6 +480,9 @@ public class Main {
 				menu = new StatisticsToolsMenu();
 				break;
 			case 5:
+				menu = new RecommendMovieMenu();
+				break;
+			case 6:
 				System.out.println("Exiting...");
 				System.exit(0);
 				break;
@@ -571,16 +574,40 @@ public class Main {
 					System.out.println("Invalid selection. Please try again.");
 			}
 		} else if (menu instanceof RecommendMovieMenu) {
-			switch (s) {
-				case 1:
-					//content based
-					break;
-				case 2:
-					//user based
-					break;
-				default:
-					MainMenu(new Menu());
-					break;
+			String uname = menu.getString("Enter your username: ");
+			boolean found = false;
+			for (User u : usersList.getUsers()) {
+				if (u.getUsername().equals(uname)) {
+					found = true;
+					User user = u;
+					ArrayList<Movie> moviesViewed = new ArrayList<>();
+					System.out.println("User found.");
+					for (Movie m : moviesList.getMovies()) {
+						if (m.getUser().getUsername().equals(uname)) {
+							moviesViewed.add(m);
+						}
+						
+					}
+					Recommender recommender = new Recommender(user, moviesViewed);
+					switch (s) {
+						case 1:
+							recommender.filterContentBased(moviesList.getMovies(), reviewsList.getReviews());
+							menu.pressContinue();
+							break;
+						case 2:
+							// user based
+							break;
+						default:
+							MainMenu(new Menu());
+							break;
+					}
+
+				}
+
+			}
+			if (!found) {
+				System.out.println("User not found.");
+				menu.pressContinue();
 			}
 		} else if (menu instanceof StatisticsToolsMenu) {
 			switch (s) {

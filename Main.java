@@ -408,7 +408,7 @@ public class Main {
 
 	public static void initializeData(Menu menu) {
 		usersList.initializeSampleUsers(); // Initialize sample users here
-		moviesList.initializeSampleMovies(); // Initialize sample movies here and connect existin users
+		// moviesList.initializeSampleMovies(); // Initialize sample movies here and connect existin users
 		// grab sample csv review data from the web
 		ArrayList<List<String>> data = new Data().getData();
 		// parse to the lists

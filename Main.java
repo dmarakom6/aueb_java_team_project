@@ -595,7 +595,8 @@ public class Main {
 							menu.pressContinue();
 							break;
 						case 2:
-							// user based
+							recommender.filterUserBased();
+							menu.pressContinue();
 							break;
 						default:
 							MainMenu(new Menu());

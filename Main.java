@@ -22,8 +22,7 @@ public class Main {
 	public static ReviewsList reviewsList = new ReviewsList();
 
 	private static Predicate<String> notIn(List<String> list) { // function that returns a condition (predicate) which
-																// on its turn returns true when an item is not in a
-																// list
+																//  returns true when an item is not in a list
 		return g -> !list.contains(g); // the condition is based on this lambda
 	}
 
@@ -617,12 +616,49 @@ public class Main {
 			switch (s) {
 				case 1:
 					// todo (use printTopMoviesByGenre(n=?))
+					moviesList.printTopMoviesByGenre(5);
 					break;
 				case 2:
 					// todo
+					for (User usr : usersList.getUsers()) {
+						double sum = 0;
+						int numberofrev = 0; // number of reviews per user
+						for(Review rev : reviewsList.getReviews()) {
+							User usrtemp = rev.getUser();
+							if (usr.getUsername().equals(usrtemp.getUsername())) {
+								sum += rev.getWeightedRating();
+								numberofrev += 1;
+							}
+						}
+						if (numberofrev == 0) {
+							System.out.println(usr.getUsername() + " has not reviewed anything.");
+						}else{
+							System.out.println(usr.getUsername() + "'s" + "average review rating is: " + sum/numberofrev);
+						}
+					}
 					break;
 				case 3:
 					// todo
+					System.out.println("Trending Movies:");
+					int numoftrendingmovies = 0;
+					for (Movie movie : moviesList.getMovies()) {
+						int revabove7 = 0; // reviews with rating above 7
+						int revsum = 0; // total number of reviews for that movie
+						for (Review rev : reviewsList.getReviews()) {
+							if (rev.getMovie() == movie) {
+								revsum += 1;
+								if(rev.getWeightedRating()>7){
+									revabove7 += 1;
+								}
+							}
+						}
+						if (revabove7/revsum >= 0.8){
+							movie.printDetails();
+						}
+					}					
+					if (numoftrendingmovies == 0){
+						System.out.println("There are no trending movies currently.");
+					}
 					break;
 				case 4: // back
 					MainMenu(new Menu());

@@ -615,8 +615,8 @@ public class Main {
 		} else if (menu instanceof StatisticsToolsMenu) {
 			switch (s) {
 				case 1:
-					// todo (use printTopMoviesByGenre(n=?))
 					moviesList.printTopMoviesByGenre(5);
+					menu.pressContinue();
 					break;
 				case 2:
 					// todo
@@ -633,9 +633,10 @@ public class Main {
 						if (numberofrev == 0) {
 							System.out.println(usr.getUsername() + " has not reviewed anything.");
 						}else{
-							System.out.println(usr.getUsername() + "'s" + "average review rating is: " + sum/numberofrev);
+							System.out.printf("%s's average review rating is: %.2f%n", usr.getUsername(), sum / numberofrev);
 						}
 					}
+					menu.pressContinue();
 					break;
 				case 3:
 					// todo
@@ -654,10 +655,13 @@ public class Main {
 						}
 						if (revabove7/revsum >= 0.8){
 							movie.printDetails();
+							numoftrendingmovies++; //trending movie found
+							menu.pressContinue();
 						}
 					}					
 					if (numoftrendingmovies == 0){
 						System.out.println("There are no trending movies currently.");
+						menu.sleep();
 					}
 					break;
 				case 4: // back
